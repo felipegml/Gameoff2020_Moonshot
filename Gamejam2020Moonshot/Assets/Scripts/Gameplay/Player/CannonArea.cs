@@ -8,8 +8,10 @@ namespace Gameplay.Player
     {
         #region VARIABLES
 
-        [Header("Setup")]
-        public SpriteRenderer sprite;
+        //[Header("Setup")]
+        private SpriteRenderer sprite;
+        private RectTransform rect;
+        private BoxCollider2D collider;
 
         #endregion
 
@@ -20,15 +22,38 @@ namespace Gameplay.Player
             StartCoroutine(Setup());
         }
 
+        private void OnMouseEnter()
+        {
+            ChangeColor(true);
+        }
+
+        private void OnMouseExit()
+        {
+            ChangeColor(false);
+        }
+
         #endregion
 
         #region SETUP
 
         private IEnumerator Setup()
         {
-            RectTransform _rect = gameObject.GetComponent<RectTransform>();
+            sprite = gameObject.GetComponent<SpriteRenderer>();
+            rect = gameObject.GetComponent<RectTransform>();
+            collider = gameObject.GetComponent<BoxCollider2D>();
+
             yield return new WaitForEndOfFrame();
-            sprite.size = _rect.sizeDelta;
+            sprite.size = rect.sizeDelta;
+            collider.size = rect.sizeDelta;
+        }
+
+        #endregion
+
+        #region DEBUG
+
+        private void ChangeColor(bool _enter)
+        {
+            sprite.color = _enter ? Color.grey : Color.clear;
         }
 
         #endregion
