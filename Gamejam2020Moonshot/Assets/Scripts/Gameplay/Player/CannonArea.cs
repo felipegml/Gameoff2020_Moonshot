@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Common.CommonData;
 
 namespace Gameplay.Player
 {
@@ -8,10 +9,16 @@ namespace Gameplay.Player
     {
         #region VARIABLES
 
-        //[Header("Setup")]
+        [Header("Setup")]
+        public int id;
+
+        //Private
         private SpriteRenderer sprite;
         private RectTransform rect;
         private BoxCollider2D collider;
+
+        //Events
+        public static event CustomEvent SelectArea_Event;
 
         #endregion
 
@@ -24,12 +31,14 @@ namespace Gameplay.Player
 
         private void OnMouseEnter()
         {
-            ChangeColor(true);
+            //ChangeColor(true);
+            SelectArea_Event?.Invoke(new object[] { id, true });
         }
 
         private void OnMouseExit()
         {
-            ChangeColor(false);
+            //ChangeColor(false);
+            SelectArea_Event?.Invoke(new object[] { id, false });
         }
 
         #endregion

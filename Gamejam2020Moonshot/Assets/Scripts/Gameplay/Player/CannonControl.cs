@@ -1,21 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Common.CommonData;
 
 namespace Gameplay.Player
 {
     public class CannonControl : MonoBehaviour
     {
-        // Start is called before the first frame update
+        #region VARIABLES
+
+        //Events
+        public static event CustomEvent SelectArea_Event;
+
+        #endregion
+
+        #region UNITY EVENTS
+
         void Start()
         {
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        #endregion
 
-        }
+        #region SETUP
+
+
+
+        #endregion
     }
 }

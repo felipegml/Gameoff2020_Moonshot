@@ -6,6 +6,10 @@ namespace Common
 {
     public class CommonData
     {
+        #region EVENTS
 
+        public delegate void CustomEvent(object[] obj = null);
+
+        #endregion
     }
 }

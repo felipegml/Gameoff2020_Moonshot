@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Earth
+    uniqueID: 129839063
+    locked: 0
+  - name: Cannon
+    uniqueID: 1039078715
+    locked: 0
+  - name: CannonArea
+    uniqueID: 1625125563
+    locked: 0
