@@ -10,7 +10,8 @@ namespace Gameplay.Player
 
         [Header("Data")]
         public int id;
-        public Vector2 angleLimit;
+        public float orbitSpeed;
+        public float moveSpeed;
 
         [Header("Setup")]
         public GameObject joint;
@@ -18,6 +19,8 @@ namespace Gameplay.Player
 
         //Private
         private bool selected = false;
+        private float currentTime = 0;
+        private float currentAngle = 0;
 
         #endregion
 
@@ -26,15 +29,6 @@ namespace Gameplay.Player
         void Start()
         {
             Setup();
-
-            //Add Events
-            CannonArea.SelectArea_Event += CannonArea_SelectArea_Event;
-        }
-
-        private void OnDestroy()
-        {
-            //Remove Events
-            CannonArea.SelectArea_Event -= CannonArea_SelectArea_Event;
         }
 
         private void Update()
@@ -42,21 +36,13 @@ namespace Gameplay.Player
             if(selected)
             {
                 Vector2 _dir = Input.mousePosition - Camera.main.WorldToScreenPoint(joint.transform.position);
-                float _angle = Mathf.Atan2(_dir.y, _dir.x) * Mathf.Rad2Deg;
-                RotateCannon(_angle);
+                currentAngle = Mathf.Atan2(_dir.y, _dir.x) * Mathf.Rad2Deg;
+                RotateCannon(currentAngle, moveSpeed * Time.deltaTime);
             }
-        }
-
-        #endregion
-
-        #region EVENTS
-
-        private void CannonArea_SelectArea_Event(object[] obj = null)
-        {
-            if ((int)obj[0] == id)
+            else
             {
-                selected = (bool)obj[1];
-                SelectCannon(selected);
+                currentAngle += orbitSpeed;
+                RotateCannon(currentAngle);
             }
         }
 
@@ -66,21 +52,32 @@ namespace Gameplay.Player
 
         public void Setup()
         {
-            joint.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            SelectCannon(false);
+            currentAngle = 0;
+            RotateCannon(currentAngle);
+            SelectCannonDebug(false);
         }
 
-        public void RotateCannon(float _value)
+        public void SelectCannon(bool _select)
         {
-            //if(_value > angleLimit.x && _value < angleLimit.y)
-            joint.transform.rotation = Quaternion.AngleAxis(_value, Vector3.forward);
+            selected = _select;
+            SelectCannonDebug(selected);
+        }
+
+        public void RotateCannon(float _value, float _time = 0)
+        {
+            Quaternion _to = Quaternion.AngleAxis(_value, Vector3.forward);
+
+            if (_time == 0)
+                joint.transform.rotation = _to;
+            else
+                joint.transform.rotation = Quaternion.Slerp(joint.transform.rotation, _to, _time);
         }
 
         #endregion
 
         #region DEBUG
 
-        public void SelectCannon(bool _select)
+        public void SelectCannonDebug(bool _select)
         {
             cannon.color = _select ? Color.red : Color.white;
         }
